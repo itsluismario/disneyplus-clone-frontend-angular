@@ -1,0 +1,121 @@
+<div class="netflix-background">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-5">
+      <a class="navbar-brand" href="#">
+        <img src="images/netflix-logo.svg" alt="Netflix" height="45">
+      </a>
+      <a href="#" class="navbar-text text-decoration-none">Sign In</a>
+    </div>
+  </nav>
+
+  <div class="container signup-container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="signup-box bg-white p-5 rounded">
+          <h1 class="mb-4">Create your account</h1>
+          <p class="text-muted mb-4">Just a few more steps and you're done!</p>
+
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <!-- Email Input -->
+            <div class="mb-4">
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="name@example.com"
+                  formControlName="email"
+                  [ngClass]="{'is-invalid': signupForm.get('email')?.touched && signupForm.get('email')?.invalid}"
+                >
+                <label for="email">Email address</label>
+                <div class="invalid-feedback">
+                  Please enter a valid email address
+                </div>
+              </div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-4">
+              <div class="form-floating password-container">
+                <input
+                  [type]="passwordVisible ? 'text' : 'password'"
+                  class="form-control"
+                  id="password"
+                  placeholder="Password"
+                  formControlName="password"
+                  [ngClass]="{'is-invalid': signupForm.get('password')?.touched && signupForm.get('password')?.invalid}"
+                >
+                <label for="password">Password</label>
+                <button
+                  type="button"
+                  class="btn btn-link password-toggle"
+                  (click)="togglePasswordVisibility()"
+                >
+                  {{ passwordVisible ? 'HIDE' : 'SHOW' }}
+                </button>
+                <div class="invalid-feedback">
+                  Password must be at least 6 characters
+                </div>
+              </div>
+            </div>
+
+            <!-- Plan Selection -->
+            <div class="plan-selection mb-4">
+              <h5 class="mb-3">Choose your plan</h5>
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="plan"
+                  id="premium"
+                  value="premium"
+                  formControlName="plan"
+                >
+                <label class="form-check-label" for="premium">
+                  <span class="plan-name">Premium</span>
+                  <span class="plan-price">$19.99/month</span>
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="plan"
+                  id="standard"
+                  value="standard"
+                  formControlName="plan"
+                >
+                <label class="form-check-label" for="standard">
+                  <span class="plan-name">Standard</span>
+                  <span class="plan-price">$15.49/month</span>
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="plan"
+                  id="basic"
+                  value="basic"
+                  formControlName="plan"
+                >
+                <label class="form-check-label" for="basic">
+                  <span class="plan-name">Basic</span>
+                  <span class="plan-price">$9.99/month</span>
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-danger w-100 py-3"
+              [disabled]="signupForm.invalid"
+            >
+              Next
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

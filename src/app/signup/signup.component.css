@@ -1,0 +1,110 @@
+.netflix-background {
+  min-height: 100vh;
+  background-color: #f3f3f3;
+}
+
+.navbar {
+  background: linear-gradient(180deg, rgba(0,0,0,0.7) 10%, transparent);
+  padding: 1rem 0;
+}
+
+.signup-container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.signup-box {
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.form-floating {
+  position: relative;
+}
+
+.form-control {
+  height: 3.5rem;
+  padding: 1rem 0.75rem;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #e50914;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #737373;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.password-toggle:hover {
+  color: #000;
+}
+
+.plan-selection {
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.plan-selection h5 {
+  color: #333;
+  font-weight: 500;
+}
+
+.form-check {
+  padding: 0.75rem 1.75rem;
+}
+
+.form-check-input {
+  margin-top: 0.5rem;
+}
+
+.form-check-label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 0.5rem;
+}
+
+.plan-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.plan-price {
+  color: #737373;
+}
+
+.btn-danger {
+  background-color: #e50914;
+  border-color: #e50914;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.btn-danger:hover {
+  background-color: #c11119;
+  border-color: #c11119;
+}
+
+.btn-danger:disabled {
+  background-color: #e50914;
+  border-color: #e50914;
+  opacity: 0.7;
+}
