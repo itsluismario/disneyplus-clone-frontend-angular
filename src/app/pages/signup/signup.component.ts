@@ -1,24 +1,30 @@
 // signup.component.ts
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
-// Spartan UI Component Imports
+import { SharedModule } from '../../shared/index.module';
 import { provideIcons } from '@spartan-ng/ui-icon-helm';
 import {
   lucideEye,
   lucideEyeOff,
-  lucideLoader
+  lucideLoader,
+  lucideMail,
+  lucideLock,
+  lucideCheck
 } from '@ng-icons/lucide';
-import { SharedModule } from '../../shared/index.module';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [
-    SharedModule,
-  ],
+  imports: [SharedModule],
   providers: [
-    provideIcons({ lucideEye, lucideEyeOff, lucideLoader })
+    provideIcons({
+      lucideEye,
+      lucideEyeOff,
+      lucideLoader,
+      lucideMail,
+      lucideLock,
+      lucideCheck
+    })
   ],
   templateUrl: './signup.component.html'
 })
@@ -26,17 +32,24 @@ export class SignupComponent {
   @ViewChild('signupForm') signupForm!: NgForm;
   isLoading = false;
   showPassword = false;
+  agreeToTerms = false;
+  disneyLogoPath = '/images/disney.png';
 
-  onSignup(form: NgForm) {
+  async onSignup(form: NgForm) {
     if (form.invalid) {
       return;
     }
+
     this.isLoading = true;
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
       console.log('Form values:', form.value);
+    } catch (error) {
+      console.error('Signup error:', error);
+    } finally {
       this.isLoading = false;
-    }, 1500);
+    }
   }
 
   togglePasswordVisibility() {
