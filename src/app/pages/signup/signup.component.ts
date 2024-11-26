@@ -1,43 +1,21 @@
 // signup.component.ts
 import { Component, ViewChild } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { NgForm } from '@angular/forms';
 
 // Spartan UI Component Imports
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import {
-  HlmCardDirective,
-  HlmCardContentDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-  HlmCardDescriptionDirective,
-  HlmCardFooterDirective
-} from '@spartan-ng/ui-card-helm';
-import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
+import { provideIcons } from '@spartan-ng/ui-icon-helm';
 import {
   lucideEye,
   lucideEyeOff,
   lucideLoader
 } from '@ng-icons/lucide';
+import { SharedModule } from '../../shared/index.module';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    HlmButtonDirective,
-    HlmInputDirective,
-    HlmLabelDirective,
-    HlmCardDirective,
-    HlmCardContentDirective,
-    HlmCardHeaderDirective,
-    HlmCardTitleDirective,
-    HlmCardDescriptionDirective,
-    HlmCardFooterDirective,
-    HlmIconComponent
+    SharedModule,
   ],
   providers: [
     provideIcons({ lucideEye, lucideEyeOff, lucideLoader })
