@@ -1,0 +1,132 @@
+<!-- signup.component.html -->
+<div class="min-h-screen bg-black/80 flex items-center justify-center p-4">
+  <div hlmCard class="w-full max-w-md bg-black/60">
+    <div hlmCardHeader>
+      <h3 hlmCardTitle class="text-2xl text-white">Create account</h3>
+      <p hlmCardDescription class="text-gray-400">
+        Enter your email to create your account
+      </p>
+    </div>
+
+    <div hlmCardContent>
+      @if (isLoading) {
+        <div class="flex justify-center py-8">
+          <hlm-icon
+            name="lucideLoader"
+            class="h-6 w-6 animate-spin text-white"
+          />
+        </div>
+      } @else {
+        <form #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)" class="space-y-4">
+          <!-- Email -->
+          <div class="space-y-2">
+            <label hlmLabel class="text-gray-300">
+              Email
+            </label>
+            <input
+              hlmInput
+              type="email"
+              name="email"
+              ngModel
+              required
+              email
+              #emailInput="ngModel"
+              class="w-full bg-zinc-800/50 text-white border-zinc-700"
+              [class.border-red-500]="emailInput.invalid && emailInput.touched"
+            />
+            @if (emailInput.invalid && emailInput.touched) {
+              <div class="text-red-500 text-sm mt-1">
+                @if (emailInput.errors?.['required']) {
+                  <p>Email is required</p>
+                }
+                @if (emailInput.errors?.['email']) {
+                  <p>Please enter a valid email</p>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-2">
+            <label hlmLabel class="text-gray-300">
+              Password
+            </label>
+            <div class="relative">
+              <input
+                hlmInput
+                [type]="showPassword ? 'text' : 'password'"
+                name="password"
+                ngModel
+                required
+                minlength="6"
+                #passwordInput="ngModel"
+                class="w-full bg-zinc-800/50 text-white border-zinc-700 pr-10"
+                [class.border-red-500]="passwordInput.invalid && passwordInput.touched"
+              />
+              <button
+                type="button"
+                (click)="togglePasswordVisibility()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+              >
+                <hlm-icon
+                  [name]="showPassword ? 'lucideEyeOff' : 'lucideEye'"
+                  class="h-4 w-4"
+                />
+              </button>
+            </div>
+            @if (passwordInput.invalid && passwordInput.touched) {
+              <div class="text-red-500 text-sm mt-1">
+                @if (passwordInput.errors?.['required']) {
+                  <p>Password is required</p>
+                }
+                @if (passwordInput.errors?.['minlength']) {
+                  <p>Password must be at least 6 characters</p>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Terms -->
+          <div class="space-y-2">
+            <label class="flex items-start gap-2">
+              <input
+                type="checkbox"
+                name="terms"
+                ngModel
+                required
+                #termsInput="ngModel"
+                class="mt-1"
+              />
+              <span class="text-sm text-gray-300">
+                I agree to the Terms of Service and Privacy Policy
+              </span>
+            </label>
+            @if (termsInput.invalid && termsInput.touched) {
+              <div class="text-red-500 text-sm">
+                You must agree to the terms
+              </div>
+            }
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            hlmBtn
+            type="submit"
+            [disabled]="signupForm.invalid || isLoading"
+            class="w-full bg-red-600 hover:bg-red-700 text-white"
+          >
+            @if (isLoading) {
+              <hlm-icon
+                name="lucideLoader"
+                class="mr-2 h-4 w-4 animate-spin"
+              />
+              Creating account...
+            } @else {
+              Create account
+            }
+          </button>
+        </form>
+      }
+    </div>
+  </div>
+</div>
