@@ -1,9 +1,14 @@
 <!-- home.component.html -->
 <div class="min-h-screen bg-[#0d253f] text-white">
   <!-- Header Banner -->
-  <div class="bg-[#032541] py-5 mb-8">
-    <div class="container mx-auto px-4">
-      <h1 class="text-2xl font-semibold">Popular Movies</h1>
+  <div class="bg-[#032541] py-4">
+    <div class="container mx-auto py-4">
+      <div class="mb-4">
+        <h1 class="text-2xl font-semibold">Popular Movies</h1>
+      </div>
+      <div>
+        <app-search (searchResults)="handleSearchResults($event)" />
+      </div>
     </div>
   </div>
 
@@ -12,77 +17,69 @@
     <!-- Movie Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
       @for (movie of movies; track movie.id) {
-        <div class="group relative bg-white dark:bg-[#141414] rounded-lg overflow-hidden shadow-md">
-          <!-- Poster Container -->
-          <div class="relative aspect-[2/3] overflow-hidden">
-            @if (movie.posterUrl) {
-              <img
-                [src]="movie.posterUrl"
-                [alt]="movie.title"
-                class="w-full h-full object-cover"
-              >
-            } @else {
-              <div class="w-full h-full bg-gray-800 flex items-center justify-center">
-                <span class="text-gray-400">No Image</span>
-              </div>
-            }
-
-            <!-- Hover Overlay -->
-            <div class="opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/75 flex items-center justify-center transition-opacity duration-300">
-              <button class="bg-[#01b4e4] text-white px-4 py-2 rounded-full hover:bg-[#0099c5] transition-colors">
-                View Details
-              </button>
-            </div>
+      <div class="group relative bg-white dark:bg-[#141414] rounded-lg overflow-hidden shadow-md">
+        <!-- Poster Container -->
+        <div class="relative aspect-[2/3] overflow-hidden">
+          @if (movie.posterUrl) {
+          <img [src]="movie.posterUrl" [alt]="movie.title" class="w-full h-full object-cover">
+          } @else {
+          <div class="w-full h-full bg-gray-800 flex items-center justify-center">
+            <span class="text-gray-400">No Image</span>
           </div>
+          }
 
-          <!-- Rating Circle -->
-          <div class="absolute -translate-y-5 left-4">
-            <div class="w-[38px] h-[38px] rounded-full bg-[#081c22] border-2 border-[#21d07a] flex items-center justify-center">
-              <span class="text-sm font-bold text-white">
-                {{ (movie.rating * 10).toFixed(0) }}<span class="text-[10px]">%</span>
-              </span>
-            </div>
-          </div>
-
-          <!-- Movie Info -->
-          <div class="p-4 pt-6">
-            <h2 class="font-bold text-gray-900 hover:text-[#01b4e4]">
-              {{ movie.title }}
-            </h2>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
-              {{ extractYear(movie.releaseDate) }}
-            </p>
+          <!-- Hover Overlay -->
+          <div
+            class="opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/75 flex items-center justify-center transition-opacity duration-300">
+            <button class="bg-[#01b4e4] text-white px-4 py-2 rounded-full hover:bg-[#0099c5] transition-colors">
+              View Details
+            </button>
           </div>
         </div>
+
+        <!-- Rating Circle -->
+        <div class="absolute -translate-y-5 left-4">
+          <div
+            class="w-[38px] h-[38px] rounded-full bg-[#081c22] border-2 border-[#21d07a] flex items-center justify-center">
+            <span class="text-sm font-bold text-white">
+              {{ (movie.rating * 10).toFixed(0) }}<span class="text-[10px]">%</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Movie Info -->
+        <div class="p-4 pt-6">
+          <h2 class="font-bold text-gray-900 hover:text-[#01b4e4]">
+            {{ movie.title }}
+          </h2>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            {{ extractYear(movie.releaseDate) }}
+          </p>
+        </div>
+      </div>
       }
     </div>
 
-<!-- Replace the Pagination section with -->
-@if (!loading && !error && totalPages > 0) {
-  <app-pagination
-    [currentPage]="currentPage"
-    [totalPages]="totalPages"
-    (pageChange)="onPageChange($event)"
-  />
-}
+    <!-- Replace the Pagination section with -->
+    @if (!loading && !error && totalPages > 0) {
+    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)" />
+    }
     <!-- Loading State -->
     @if (loading) {
-      <div class="flex justify-center items-center mt-8">
-        <div class="w-10 h-10 border-4 border-[#01b4e4]/30 border-t-[#01b4e4] rounded-full animate-spin"></div>
-      </div>
+    <div class="flex justify-center items-center mt-8">
+      <div class="w-10 h-10 border-4 border-[#01b4e4]/30 border-t-[#01b4e4] rounded-full animate-spin"></div>
+    </div>
     }
 
     <!-- Error State -->
     @if (error) {
-      <div class="mt-8 bg-red-900/20 rounded-lg p-6 text-center">
-        <p class="text-red-400">{{ error }}</p>
-        <button
-          (click)="retryFetch()"
-          class="mt-4 px-6 py-2 bg-[#01b4e4] text-white rounded-lg hover:bg-[#0099c5] transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
+    <div class="mt-8 bg-red-900/20 rounded-lg p-6 text-center">
+      <p class="text-red-400">{{ error }}</p>
+      <button (click)="retryFetch()"
+        class="mt-4 px-6 py-2 bg-[#01b4e4] text-white rounded-lg hover:bg-[#0099c5] transition-colors">
+        Try Again
+      </button>
+    </div>
     }
   </div>
 </div>

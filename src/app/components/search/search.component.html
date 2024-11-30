@@ -1,0 +1,97 @@
+<!-- search.component.html -->
+<div class="flex items-center gap-1">
+  <!-- Search Bar -->
+  <div class="relative flex-1 max-w-2xl">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="onSearchInput($event)"
+      placeholder="Search for a movie..."
+      class="w-full pl-10 pr-4 py-2 rounded-lg border bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#01b4e4] border-gray-300 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_3px_18px_-3px_rgba(0,0,0,0.1),0_14px_24px_-2px_rgba(0,0,0,0.06)] transition-shadow"
+    >
+    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Clear Button -->
+  <button
+    (click)="resetToHome()"
+    class="flex items-center gap-2 px-4 py-2 bg-[#01b4e4] text-white rounded-lg hover:bg-[#0099c5] transition-colors"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="m15 9-6 6"/>
+      <path d="m9 9 6 6"/>
+    </svg>
+    Clear search
+  </button>
+</div>
+
+<!-- Results using same grid as home -->
+@if (movies.length > 0) {
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6">
+  @for (movie of movies; track movie.id) {
+  <div class="group relative bg-white dark:bg-[#141414] rounded-lg overflow-hidden shadow-md">
+    <!-- Poster Container -->
+    <div class="relative aspect-[2/3] overflow-hidden">
+      @if (movie.posterUrl) {
+      <img [src]="movie.posterUrl" [alt]="movie.title" class="w-full h-full object-cover">
+      } @else {
+      <div class="w-full h-full bg-gray-800 flex items-center justify-center">
+        <span class="text-gray-400">No Image</span>
+      </div>
+      }
+
+      <!-- Hover Overlay -->
+      <div
+        class="opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/75 flex items-center justify-center transition-opacity duration-300">
+        <button class="bg-[#01b4e4] text-white px-4 py-2 rounded-full hover:bg-[#0099c5] transition-colors">
+          View Details
+        </button>
+      </div>
+    </div>
+
+    <!-- Rating Circle -->
+    <div class="absolute -translate-y-5 left-4">
+      <div
+        class="w-[38px] h-[38px] rounded-full bg-[#081c22] border-2 border-[#21d07a] flex items-center justify-center">
+        <span class="text-sm font-bold text-white">
+          {{ (movie.rating * 10).toFixed(0) }}<span class="text-[10px]">%</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Movie Info -->
+    <div class="p-4 pt-6">
+      <h2 class="font-bold text-gray-900 hover:text-[#01b4e4]">
+        {{ movie.title }}
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+        {{ extractYear(movie.releaseDate) }}
+      </p>
+    </div>
+  </div>
+  }
+</div>
+} @else if (!loading && searchQuery) {
+<div class="text-center mt-8 text-gray-600">
+  No results found for "{{ searchQuery }}"
+</div>
+}
+
+<!-- Loading State -->
+@if (loading) {
+<div class="flex justify-center items-center mt-8">
+  <div class="w-10 h-10 border-4 border-[#01b4e4]/30 border-t-[#01b4e4] rounded-full animate-spin"></div>
+</div>
+}
+
+<!-- Error State -->
+@if (error) {
+<div class="mt-8 bg-red-900/20 rounded-lg p-6 text-center">
+  <p class="text-red-400">{{ error }}</p>
+</div>
+}
