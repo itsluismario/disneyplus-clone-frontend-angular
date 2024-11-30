@@ -1,17 +1,26 @@
-// movie.interface.js
-
-export interface Movie {
+// src/app/interfaces/movie.interface.ts
+export interface TMovie {
   id: number;
   title: string;
-  poster_path: string;
   overview: string;
-  vote_average: number;
-  release_date: string;
+  posterUrl: string | null;
+  backdropUrl: string | null;
+  releaseDate: string;
+  rating: number;
+  popularity: number;
+  genres: any[];
+  runtime: number | null;
+  tagline: string | null;
 }
 
-export interface MovieResponse {
+export interface TMovieResponse {
+  results: TMovie[];
   page: number;
-  results: Movie[];
   total_pages: number;
   total_results: number;
 }
+
+export interface TPaginatedMovieResponse extends TMovieResponse {
+  hasMore: boolean;
+}
+

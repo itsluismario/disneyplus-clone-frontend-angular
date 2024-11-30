@@ -1,0 +1,38 @@
+<!-- src/app/components/pagination/pagination.component.html -->
+<nav hlmPagination class="mt-4">
+  <ul hlmPaginationContent>
+    <li hlmPaginationItem>
+      <hlm-pagination-previous
+        (click)="changePage(currentPage - 1)"
+        [class.pointer-events-none]="currentPage === 1"
+        [class.opacity-50]="currentPage === 1"
+      />
+    </li>
+
+    @for (page of visiblePages; track page) {
+      <li hlmPaginationItem>
+        <a
+          hlmPaginationLink
+          [isActive]="currentPage === page"
+          (click)="changePage(page)"
+        >
+          {{ page }}
+        </a>
+      </li>
+    }
+
+    @if (totalPages > visiblePages.length) {
+      <li hlmPaginationItem>
+        <hlm-pagination-ellipsis />
+      </li>
+    }
+
+    <li hlmPaginationItem>
+      <hlm-pagination-next
+        (click)="changePage(currentPage + 1)"
+        [class.pointer-events-none]="currentPage === totalPages"
+        [class.opacity-50]="currentPage === totalPages"
+      />
+    </li>
+  </ul>
+</nav>
