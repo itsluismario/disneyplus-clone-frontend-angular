@@ -28,9 +28,6 @@
       "@spartan-ng/ui-alert-helm": [
         "./src/app/components/ui/ui-alert-helm/src/index.ts"
       ],
-      "@spartan-ng/ui-alertdialog-helm": [
-        "./src/app/components/ui/ui-alertdialog-helm/src/index.ts"
-      ],
       "@spartan-ng/ui-aspectratio-helm": [
         "./src/app/components/ui/ui-aspectratio-helm/src/index.ts"
       ],
@@ -129,6 +126,9 @@
       ],
       "@spartan-ng/ui-typography-helm": [
         "./src/app/components/ui/ui-typography-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-alertdialog-helm": [
+        "./src/app/components/ui/ui-alertdialog-helm/src/index.ts"
       ]
     }
   },
