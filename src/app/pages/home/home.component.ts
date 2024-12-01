@@ -5,6 +5,7 @@ import { TMovie, TPaginatedMovieResponse } from '../../interfaces/movie.interfac
 import { MovieService } from '../../services/movie/movie.service';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
 import { SearchComponent } from '../../components/search/search.component';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,10 @@ export class HomeComponent implements OnInit {
   totalPages = 0;
   visiblePages: number[] = []; // Add this line
 
-  constructor(private movieService: MovieService) {}
+  constructor(
+    private movieService: MovieService,
+    private favoritesService: FavoritesService
+  ) {}
 
   ngOnInit() {
     this.fetchMovies();
@@ -96,4 +100,11 @@ export class HomeComponent implements OnInit {
     this.updateVisiblePages();
   }
 
+  isFavorite(movieId: number): boolean {
+    return this.favoritesService.isFavorite(movieId);
+  }
+
+  toggleFavorite(movie: TMovie) {
+    this.favoritesService.toggleFavorite(movie);
+  }
 }

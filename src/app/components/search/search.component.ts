@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MovieService } from '../../services/movie/movie.service';
 import { TMovie, TPaginatedMovieResponse } from '../../interfaces/movie.interface';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-search',
@@ -21,7 +22,7 @@ export class SearchComponent {
   movies: TMovie[] = [];
   private searchSubject = new Subject<string>();
 
-  constructor(private movieService: MovieService) {
+  constructor(private movieService: MovieService, private favoritesService: FavoritesService) {
     // Set up debounced search
     this.searchSubject.pipe(
       debounceTime(10), // Wait 300ms after user stops typing
@@ -66,10 +67,17 @@ export class SearchComponent {
     }
   }
 
-
   resetToHome() {
     this.searchQuery = '';
     this.movies = [];
     this.searchResults.emit(null);
+  }
+
+  isFavorite(movieId: number): boolean {
+    return this.favoritesService.isFavorite(movieId);
+  }
+
+  toggleFavorite(movie: TMovie) {
+    this.favoritesService.toggleFavorite(movie);
   }
 }
