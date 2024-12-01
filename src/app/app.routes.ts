@@ -9,11 +9,11 @@ export const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'signup',
+    path: 'auth/signup',
     component: SignupComponent
   },
   {
-    path: 'login',
+    path: 'auth/login',
     component: LoginComponent
   }
 ];

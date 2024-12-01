@@ -1,0 +1,55 @@
+<!-- nav-bar.component.html -->
+<header class="w-full bg-[#032541] text-white">
+  <div class="container mx-auto px-4">
+    <div class="flex h-16 items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <a routerLink="/" class="text-2xl font-bold hover:text-[#01b4e4] transition-colors">
+          TMDB
+        </a>
+
+        <div class="flex space-x-6">
+          <a routerLink="/"
+            routerLinkActive="text-[#01b4e4]"
+            [routerLinkActiveOptions]="{exact: true}"
+            class="text-white hover:text-[#01b4e4] transition-colors">
+            Movies
+          </a>
+          <a routerLink="/favorites"
+            routerLinkActive="text-[#01b4e4]"
+            class="text-white hover:text-[#01b4e4] transition-colors">
+            Favorites
+          </a>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <ng-container *ngIf="!userIsAuthenticated">
+          <a routerLink="/auth/signup"
+            routerLinkActive="text-[#01b4e4]"
+            class="hover:text-[#01b4e4] transition-colors">
+            Sign up
+          </a>
+          <a routerLink="/auth/login"
+            routerLinkActive="text-[#01b4e4]"
+            class="hover:text-[#01b4e4] transition-colors">
+            Login
+          </a>
+        </ng-container>
+
+        <button *ngIf="userIsAuthenticated"
+          (click)="onLogout()"
+          class="hover:text-[#01b4e4] transition-colors">
+          Logout
+        </button>
+
+        <div class="h-6 w-px bg-gray-600" *ngIf="userIsAuthenticated"></div>
+
+        <a *ngIf="userIsAuthenticated"
+          routerLink="/movies"
+          class="bg-[#01b4e4] hover:bg-[#0099c5] text-white px-4 py-2 rounded-full transition-colors">
+          Movies
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
