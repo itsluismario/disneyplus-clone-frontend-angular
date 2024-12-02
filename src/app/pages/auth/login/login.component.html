@@ -1,8 +1,8 @@
-<!-- signup.component.html -->
+<!-- login.component.html -->
 <div class="min-h-screen bg-[#0F172A] flex items-center justify-center p-4">
   <div hlmCard class="w-full max-w-md bg-white shadow-xl rounded-xl">
     <div hlmCardHeader class="text-center pb-2">
-      <!-- Disney+ Logo -->
+      <!-- Updated Disney+ Logo -->
       <div>
         <img
           src="disney.png"
@@ -12,7 +12,7 @@
         />
       </div>
       <p hlmCardDescription class="text-gray-500 mt-2">
-        Create your account to start streaming
+        Log in with your email and password
       </p>
     </div>
 
@@ -25,7 +25,7 @@
           />
         </div>
       } @else {
-        <form #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)" class="space-y-6">
+        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)" class="space-y-6">
           <!-- Email -->
           <div class="space-y-1.5">
             <label hlmLabel class="text-gray-700 flex gap-2 items-center text-sm font-medium">
@@ -78,17 +78,16 @@
                 name="password"
                 ngModel
                 required
-                minlength="6"
                 #passwordInput="ngModel"
                 class="w-full h-11 bg-white border-gray-200 rounded-lg
                        placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]"
-                placeholder="Create a password"
+                placeholder="Enter your password"
                 [class.border-red-500]="passwordInput.invalid && passwordInput.touched"
               />
               <button
                 type="button"
                 (click)="togglePasswordVisibility()"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400
+                class="absolute right-4 top-1/2 -translate-y-1/3 text-gray-400
                        hover:text-[#2563EB] transition-colors duration-200"
               >
                 <hlm-icon
@@ -102,42 +101,15 @@
                 @if (passwordInput.errors?.['required']) {
                   <p>Password is required</p>
                 }
-                @if (passwordInput.errors?.['minlength']) {
-                  <p>Password must be at least 6 characters</p>
-                }
               </div>
             }
           </div>
 
-          <!-- Terms -->
-          <div class="space-y-2">
-            <label class="flex items-start gap-3 cursor-pointer group">
-              <input
-                type="checkbox"
-                name="terms"
-                [(ngModel)]="agreeToTerms"
-                required
-                #termsInput="ngModel"
-                class="w-4 h-4 rounded border-gray-300 text-[#2563EB]
-                       focus:ring-[#2563EB] mt-1"
-              />
-              <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
-                I agree to Disney+'s Terms of Use and acknowledge Disney+'s
-                Privacy Policy applies to my personal information.
-              </span>
-            </label>
-            @if (termsInput.invalid && termsInput.touched) {
-              <div class="text-red-500 text-sm px-1">
-                You must agree to the terms to continue
-              </div>
-            }
-          </div>
-
-          <!-- Submit Button -->
+       <!-- Submit Button -->
           <button
             hlmBtn
             type="submit"
-            [disabled]="signupForm.invalid || isLoading"
+            [disabled]="loginForm.invalid || isLoading"
             class="w-full h-11 mt-6 bg-[#2563EB] hover:bg-[#1E40AF] text-white
                    font-semibold rounded-lg transition-all duration-200
                    disabled:opacity-50 disabled:cursor-not-allowed"
@@ -147,20 +119,20 @@
                 name="lucideLoader"
                 class="mr-2 h-5 w-5 animate-spin"
               />
-              Creating your account...
+              Signing in...
             } @else {
-              Create Account
+              Sign in
             }
           </button>
 
-          <!-- Login link -->
+          <!-- Sign up link -->
           <div class="text-center mt-6">
             <span class="text-gray-600">
-              Already have an account?
-              <a href="/login"
+              New to Disney+?
+              <a href="/auth/signup"
                  class="text-[#2563EB] hover:text-[#1E40AF]
                         transition-colors ml-1 font-medium">
-                Log in
+                Sign up now
               </a>
             </span>
           </div>

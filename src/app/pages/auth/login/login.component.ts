@@ -10,7 +10,9 @@ import {
   lucideMail,
   lucideLock
 } from '@ng-icons/lucide';
-import { SharedModule } from '../../shared/index.module';
+import { SharedModule } from '../../../shared/index.module';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -32,29 +34,34 @@ export class LoginComponent {
   isLoading = false;
   showPassword = false;
   rememberMe = false;
-  // disneyLogoPath = './../../../app/assets/disney.png';
 
   disneyLogoPath = window.location.origin + '/../frontend/src/app/assets/disney.png';
 
-  async onLogin(form: NgForm) {
+  private authStatusSub!: Subscription;
+
+  constructor(public authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
+  }
+
+  onLogin(form: NgForm) {
     if (form.invalid) {
       return;
     }
-    console.log(this.isLoading);
-
     this.isLoading = true;
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Login form values:', form.value);
-    } catch (error) {
-      console.error('Login error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.authService.login(form.value.email, form.value.password);
   }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  ngOnDestroy(): void {
+    this.authStatusSub.unsubscribe();
   }
 }

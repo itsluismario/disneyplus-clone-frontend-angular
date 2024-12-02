@@ -1,7 +1,7 @@
 // signup.component.ts
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { SharedModule } from '../../shared/index.module';
+import { SharedModule } from '../../../shared/index.module';
 import { provideIcons } from '@spartan-ng/ui-icon-helm';
 import {
   lucideEye,
@@ -11,6 +11,8 @@ import {
   lucideLock,
   lucideCheck
 } from '@ng-icons/lucide';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -35,24 +37,33 @@ export class SignupComponent {
   agreeToTerms = false;
   disneyLogoPath = '/images/disney.png';
 
+  private authStatusSub!: Subscription;
+
+  constructor(public authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
+  }
+
   async onSignup(form: NgForm) {
     if (form.invalid) {
       return;
     }
-
     this.isLoading = true;
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Form values:', form.value);
-    } catch (error) {
-      console.error('Signup error:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    this.authService.createUser(form.value.email, form.value.password);
   }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
+  ngOnDestroy(): void {
+    this.authStatusSub.unsubscribe();
+  }
+
+
 }

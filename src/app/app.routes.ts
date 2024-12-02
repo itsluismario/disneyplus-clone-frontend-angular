@@ -1,6 +1,7 @@
+// app.routes.ts
 import { Routes } from '@angular/router';
-import { SignupComponent } from './pages/signup/signup.component';
-import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/auth/signup/signup.component';
+import { LoginComponent } from './pages/auth/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
@@ -9,11 +10,8 @@ export const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'auth/signup',
-    component: SignupComponent
-  },
-  {
-    path: 'auth/login',
-    component: LoginComponent
+    path: 'auth',
+    loadChildren: () => import('./pages/auth/auth.module')
+      .then(m => m.AuthModule)
   }
 ];

@@ -1,8 +1,8 @@
-<!-- login.component.html -->
+<!-- signup.component.html -->
 <div class="min-h-screen bg-[#0F172A] flex items-center justify-center p-4">
   <div hlmCard class="w-full max-w-md bg-white shadow-xl rounded-xl">
     <div hlmCardHeader class="text-center pb-2">
-      <!-- Updated Disney+ Logo -->
+      <!-- Disney+ Logo -->
       <div>
         <img
           src="disney.png"
@@ -12,7 +12,7 @@
         />
       </div>
       <p hlmCardDescription class="text-gray-500 mt-2">
-        Log in with your email and password
+        Create your account to start streaming
       </p>
     </div>
 
@@ -25,7 +25,7 @@
           />
         </div>
       } @else {
-        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)" class="space-y-6">
+        <form #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)" class="space-y-6">
           <!-- Email -->
           <div class="space-y-1.5">
             <label hlmLabel class="text-gray-700 flex gap-2 items-center text-sm font-medium">
@@ -78,16 +78,17 @@
                 name="password"
                 ngModel
                 required
+                minlength="6"
                 #passwordInput="ngModel"
                 class="w-full h-11 bg-white border-gray-200 rounded-lg
                        placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]"
-                placeholder="Enter your password"
+                placeholder="Create a password"
                 [class.border-red-500]="passwordInput.invalid && passwordInput.touched"
               />
               <button
                 type="button"
                 (click)="togglePasswordVisibility()"
-                class="absolute right-4 top-1/2 -translate-y-1/3 text-gray-400
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400
                        hover:text-[#2563EB] transition-colors duration-200"
               >
                 <hlm-icon
@@ -101,36 +102,18 @@
                 @if (passwordInput.errors?.['required']) {
                   <p>Password is required</p>
                 }
+                @if (passwordInput.errors?.['minlength']) {
+                  <p>Password must be at least 6 characters</p>
+                }
               </div>
             }
-          </div>
-
-          <!-- Remember me & Forgot password -->
-          <div class="flex items-center justify-between pt-2">
-            <label class="flex items-center gap-2 cursor-pointer group">
-              <input
-                type="checkbox"
-                name="rememberMe"
-                [(ngModel)]="rememberMe"
-                class="w-4 h-4 rounded border-gray-300 text-[#2563EB]
-                       focus:ring-[#2563EB]"
-              />
-              <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
-                Remember me
-              </span>
-            </label>
-            <a href="/forgot-password"
-               class="text-sm font-medium text-[#2563EB] hover:text-[#1E40AF]
-                      transition-colors">
-              Forgot password?
-            </a>
           </div>
 
           <!-- Submit Button -->
           <button
             hlmBtn
             type="submit"
-            [disabled]="loginForm.invalid || isLoading"
+            [disabled]="signupForm.invalid || isLoading"
             class="w-full h-11 mt-6 bg-[#2563EB] hover:bg-[#1E40AF] text-white
                    font-semibold rounded-lg transition-all duration-200
                    disabled:opacity-50 disabled:cursor-not-allowed"
@@ -140,20 +123,20 @@
                 name="lucideLoader"
                 class="mr-2 h-5 w-5 animate-spin"
               />
-              Signing in...
+              Creating your account...
             } @else {
-              Sign in
+              Create Account
             }
           </button>
 
-          <!-- Sign up link -->
+          <!-- Login link -->
           <div class="text-center mt-6">
             <span class="text-gray-600">
-              New to Disney+?
-              <a href="/signup"
+              Already have an account?
+              <a href="/auth/login"
                  class="text-[#2563EB] hover:text-[#1E40AF]
                         transition-colors ml-1 font-medium">
-                Sign up now
+                Log in
               </a>
             </span>
           </div>
