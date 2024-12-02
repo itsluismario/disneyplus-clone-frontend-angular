@@ -12,6 +12,10 @@ import {
   HlmDialogHeaderComponent,
   HlmDialogTitleDirective,
 } from '@spartan-ng/ui-dialog-helm';
+import { OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../pages/auth/auth.service';
+
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
@@ -31,13 +35,27 @@ import {
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit, OnDestroy{
   userIsAuthenticated = false;
+  private authListenerSubs!: Subscription;
 
-  onLogout() {
-    // Implement logout logic
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.userIsAuthenticated = this.authService.getIsAuth();
+
+    this.authListenerSubs = this.authService
+      .getAuthStatusListener()
+      .subscribe(isAuthenticated => {
+        this.userIsAuthenticated = isAuthenticated;
+      });
   }
 
-  ngOnInit() { }
+  ngOnDestroy() {
+    this.authListenerSubs.unsubscribe();
+  }
 
+  onLogout() {
+    this.authService.logout();
+  }
 }

@@ -1,12 +1,12 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
-import { SignupComponent } from './pages/auth/signup/signup.component';
-import { LoginComponent } from './pages/auth/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
+import { AuthGuard } from './pages/auth/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
+    canActivate: [AuthGuard],
     component: HomeComponent
   },
   {

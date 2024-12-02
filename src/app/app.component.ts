@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SharedModule } from './shared/index.module';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-
+import { AuthService } from './pages/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +11,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'frontend-netflix';
+export class AppComponent implements OnInit {
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.autoAuthUser();
+  }
 }

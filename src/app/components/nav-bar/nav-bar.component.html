@@ -10,7 +10,7 @@
         <div class="flex space-x-6">
           <!-- Favorites Dialog -->
 
-          <hlm-dialog>
+          <hlm-dialog *ngIf="userIsAuthenticated">
             <button brnDialogTrigger hlmBtn>Favorites</button>
             <hlm-dialog-content *brnDialogContent="let ctx">
               <hlm-dialog-header>
@@ -37,7 +37,7 @@
 
         <div class="h-6 w-px bg-gray-600" *ngIf="userIsAuthenticated"></div>
 
-        <a *ngIf="userIsAuthenticated" routerLink="/movies"
+        <a *ngIf="userIsAuthenticated" routerLink="/"
           class="bg-[#01b4e4] hover:bg-[#0099c5] text-white px-4 py-2 rounded-full transition-colors">
           Movies
         </a>
