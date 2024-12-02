@@ -1,20 +1,24 @@
-// src/app/services/movie.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { TPaginatedMovieResponse } from '../../interfaces/movie.interface';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
-  private apiUrl = 'http://localhost:3000/api/v1';
-  private pageSize = 20;
+  private apiUrl = environment.apiUrl;
+
+  constructor(private http: HttpClient) {}
 
   async getAllMovies(page: number = 1): Promise<TPaginatedMovieResponse> {
     try {
-      const response = await fetch(
-        `${this.apiUrl}/movies?page=${page}`
+      const data = await firstValueFrom(
+        this.http.get<any>(`${this.apiUrl}/movies?page=${page}`)
       );
-      const data = await response.json();
 
       if (!data.success) {
         throw new Error(data.message || 'Failed to fetch movies');
@@ -32,16 +36,16 @@ export class MovieService {
       throw error;
     }
   }
+
   async searchMovies(query: string): Promise<TPaginatedMovieResponse> {
     try {
       if (!query) {
         throw new Error('Search query is required');
       }
 
-      const response = await fetch(
-        `${this.apiUrl}/movies/search?q=${encodeURIComponent(query)}`
+      const data = await firstValueFrom(
+        this.http.get<any>(`${this.apiUrl}/movies/search?q=${encodeURIComponent(query)}`)
       );
-      const data = await response.json();
 
       if (!data.success) {
         throw new Error(data.message || 'Failed to search movies');

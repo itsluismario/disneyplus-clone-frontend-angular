@@ -54,6 +54,8 @@ export class AuthService {
         authData
       )
       .subscribe((response) => {
+        console.log('response', response);
+
         const token = response.token;
         this.token = token;
         if (token) {
