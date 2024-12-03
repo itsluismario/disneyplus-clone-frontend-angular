@@ -54,8 +54,6 @@ export class AuthService {
         authData
       )
       .subscribe((response) => {
-        console.log('response', response);
-
         const token = response.token;
         this.token = token;
         if (token) {
@@ -99,7 +97,7 @@ export class AuthService {
     clearTimeout(this.tokenTimer);
     this.userId = null;
     this.clearAuthData();
-    this.router.navigate(['/']);
+    this.router.navigate(['/auth/login']);
   }
 
   private saveAuthData(token: string, expirationDate: Date, userId: string) {
