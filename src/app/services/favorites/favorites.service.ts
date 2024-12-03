@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { TMovie } from '../../interfaces/movie.interface';
+import { environment } from '../../../environments/environment.development';
+
+const BACKEND_URL = environment.apiUrl + '/auth';
 
 interface FavoriteResponse {
   success: boolean;
@@ -24,7 +27,7 @@ interface FavoriteStatus {
   providedIn: 'root'
 })
 export class FavoritesService {
-  private apiUrl = 'http://localhost:3000/api/v1/favorites';
+  private apiUrl = BACKEND_URL + '/favorites';
   private favoritesSubject = new BehaviorSubject<TMovie[]>([]);
   favorites$ = this.favoritesSubject.asObservable();
 
