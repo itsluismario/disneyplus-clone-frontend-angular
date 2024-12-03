@@ -1,147 +1,68 @@
-<!-- signup.component.html -->
 <div class="min-h-screen bg-[#0F172A] flex items-center justify-center p-4">
-  <div hlmCard class="w-full max-w-md bg-white shadow-xl rounded-xl">
-    <div hlmCardHeader class="text-center pb-2">
-      <!-- Disney+ Logo -->
-      <div>
-        <img
-          src="disney.png"
-          alt="Disney+"
-          class="h-36 mx-auto"
-          loading="eager"
-        />
-      </div>
-      <p hlmCardDescription class="text-gray-500 mt-2">
-        Create your account to start streaming
-      </p>
+  <div class="w-full max-w-md bg-white shadow-xl rounded-xl">
+    <div class="text-center pb-2">
+      <img src="disney.png" alt="Disney+" class="h-36 mx-auto" loading="eager" />
+      <h2>Create your account to start streaming</h2>
     </div>
 
-    <div hlmCardContent>
-      @if (isLoading) {
-        <div class="flex justify-center py-12">
-          <hlm-icon
-            name="lucideLoader"
-            class="h-8 w-8 animate-spin text-[#2563EB]"
-          />
+    <form #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)" class="space-y-4 p-6">
+      <div class="space-y-1.5">
+        <label hlmLabel class="text-gray-700 flex gap-2 items-center text-sm font-medium">
+          <hlm-icon name="lucideMail" class="h-4 w-4 text-[#2563EB]" />
+          Email
+        </label>
+        <div class="relative">
+          <input hlmInput type="email" name="email" ngModel required email #emailInput="ngModel" class="w-full h-11 bg-white border-gray-200 rounded-lg
+                   placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]"
+            placeholder="name@example.com" [class.border-red-500]="emailInput.invalid && emailInput.touched" />
         </div>
-      } @else {
-        <form #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)" class="space-y-6">
-          <!-- Email -->
-          <div class="space-y-1.5">
-            <label hlmLabel class="text-gray-700 flex gap-2 items-center text-sm font-medium">
-              <hlm-icon
-                name="lucideMail"
-                class="h-4 w-4 text-[#2563EB]"
-              />
-              Email
-            </label>
-            <div class="relative">
-              <input
-                hlmInput
-                type="email"
-                name="email"
-                ngModel
-                required
-                email
-                #emailInput="ngModel"
-                class="w-full h-11 bg-white border-gray-200 rounded-lg
-                       placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]"
-                placeholder="name@example.com"
-                [class.border-red-500]="emailInput.invalid && emailInput.touched"
-              />
-            </div>
-            @if (emailInput.invalid && emailInput.touched) {
-              <div class="text-red-500 text-sm px-1">
-                @if (emailInput.errors?.['required']) {
-                  <p>Email is required</p>
-                }
-                @if (emailInput.errors?.['email']) {
-                  <p>Please enter a valid email</p>
-                }
-              </div>
-            }
-          </div>
+        <div *ngIf="emailInput.invalid && emailInput.touched" class="text-red-500 text-sm px-1">
+          <span *ngIf="emailInput.errors?.['required']">Email is required</span>
+          <span *ngIf="emailInput.errors?.['email']">Please enter a valid email</span>
+        </div>
+      </div>
 
-          <!-- Password -->
-          <div class="space-y-1.5">
-            <label hlmLabel class="text-gray-700 flex gap-2 items-center text-sm font-medium">
-              <hlm-icon
-                name="lucideLock"
-                class="h-4 w-4 text-[#2563EB]"
-              />
-              Password
-            </label>
-            <div class="relative">
-              <input
-                hlmInput
-                [type]="showPassword ? 'text' : 'password'"
-                name="password"
-                ngModel
-                required
-                minlength="6"
-                #passwordInput="ngModel"
-                class="w-full h-11 bg-white border-gray-200 rounded-lg
-                       placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]"
-                placeholder="Create a password"
-                [class.border-red-500]="passwordInput.invalid && passwordInput.touched"
-              />
-              <button
-                type="button"
-                (click)="togglePasswordVisibility()"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400
-                       hover:text-[#2563EB] transition-colors duration-200"
-              >
-                <hlm-icon
-                  [name]="showPassword ? 'lucideEyeOff' : 'lucideEye'"
-                  class="h-5 w-5"
-                />
-              </button>
-            </div>
-            @if (passwordInput.invalid && passwordInput.touched) {
-              <div class="text-red-500 text-sm px-1">
-                @if (passwordInput.errors?.['required']) {
-                  <p>Password is required</p>
-                }
-                @if (passwordInput.errors?.['minlength']) {
-                  <p>Password must be at least 6 characters</p>
-                }
-              </div>
-            }
-          </div>
-
-          <!-- Submit Button -->
-          <button
-            hlmBtn
-            type="submit"
-            [disabled]="signupForm.invalid || isLoading"
-            class="w-full h-11 mt-6 bg-[#2563EB] hover:bg-[#1E40AF] text-white
-                   font-semibold rounded-lg transition-all duration-200
-                   disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            @if (isLoading) {
-              <hlm-icon
-                name="lucideLoader"
-                class="mr-2 h-5 w-5 animate-spin"
-              />
-              Creating your account...
-            } @else {
-              Create Account
-            }
+      <div class="space-y-1.5">
+        <label hlmLabel class="text-gray-700 flex gap-2 items-center text-sm font-medium">
+          <hlm-icon name="lucideLock" class="h-4 w-4 text-[#2563EB]" />
+          Password
+        </label>
+        <div class="relative">
+          <input hlmInput [type]="showPassword ? 'text' : 'password'" name="password" ngModel required minlength="6"
+            #passwordInput="ngModel" class="w-full h-11 bg-white border-gray-200 rounded-lg
+                   placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]"
+            placeholder="Create a password" [class.border-red-500]="passwordInput.invalid && passwordInput.touched" />
+          <button type="button" (click)="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400
+                 hover:text-[#2563EB] transition-colors duration-200">
+            <hlm-icon [name]="showPassword ? 'lucideEyeOff' : 'lucideEye'" class="h-5 w-5" />
           </button>
+        </div>
+        <div class="text-sm text-gray-600">Passwords must be 8 characters or more</div>
+        <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-red-500 text-sm px-1">
+          <span *ngIf="passwordInput.errors?.['required']">Password is required</span>
+          <span *ngIf="passwordInput.errors?.['minlength']">Password must be at least 8 characters</span>
+        </div>
+      </div>
 
-          <!-- Login link -->
-          <div class="text-center mt-6">
-            <span class="text-gray-600">
-              Already have an account?
-              <a href="/auth/login"
-                 class="text-[#2563EB] hover:text-[#1E40AF]
-                        transition-colors ml-1 font-medium">
-                Log in
-              </a>
-            </span>
-          </div>
-        </form>
-      }
-    </div>
+      <button hlmBtn type="submit" [disabled]="signupForm.invalid || isLoading" class="w-full h-11 mt-6 bg-[#2563EB] hover:bg-[#1E40AF] text-white
+             font-semibold rounded-lg transition-all duration-200
+             disabled:opacity-50 disabled:cursor-not-allowed">
+        <span *ngIf="isLoading" class="flex items-center justify-center">
+          <hlm-icon class="animate-spin mr-2" name="lucideLoader" />
+          Creating your account...
+        </span>
+        <span *ngIf="!isLoading">Create Account</span>
+      </button>
+
+      <div class="text-center mt-6">
+        <span class="text-gray-600">
+          Already have an account?
+          <a href="/auth/login" class="text-[#2563EB] hover:text-[#1E40AF]
+                    transition-colors ml-1 font-medium">
+            Log in
+          </a>
+        </span>
+      </div>
+    </form>
   </div>
 </div>
