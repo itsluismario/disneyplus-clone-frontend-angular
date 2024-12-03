@@ -25,6 +25,9 @@ export class HomeComponent implements OnInit {
   totalPages = 0;
   visiblePages: number[] = []; // Add this line
 
+
+  favoriteStates = new Map<number, boolean>();
+
   constructor(
     private movieService: MovieService,
     private favoritesService: FavoritesService
@@ -32,26 +35,11 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.fetchMovies();
-  }
-
-  async fetchMovies(page = this.currentPage) {
-    try {
-      this.loading = true;
-      this.error = null;
-
-      const response = await this.movieService.getAllMovies(page);
-
-      if (response) {
-        this.movies = response.results;
-        this.currentPage = response.page;
-        this.totalPages = response.total_pages;
-      }
-    } catch (error) {
-      console.error('Error fetching movies:', error);
-      this.error = 'Failed to load movies. Please try again later.';
-    } finally {
-      this.loading = false;
-    }
+    // Subscribe to favorites changes
+    this.favoritesService.favorites$.subscribe(() => {
+      // Update favorite states for current movies
+      this.updateFavoriteStates();
+    });
   }
 
   onPageChange(page: number) {
@@ -87,6 +75,45 @@ export class HomeComponent implements OnInit {
       (_, i) => start + i
     );
   }
+  async fetchMovies(page = this.currentPage) {
+    try {
+      this.loading = true;
+      this.error = null;
+
+      const response = await this.movieService.getAllMovies(page);
+
+      if (response) {
+        this.movies = response.results;
+        this.currentPage = response.page;
+        this.totalPages = response.total_pages;
+        this.updateFavoriteStates(); // Update favorite states for new movies
+      }
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+      this.error = 'Failed to load movies. Please try again later.';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private async updateFavoriteStates() {
+    for (const movie of this.movies) {
+      const isFavorite = await this.favoritesService.isFavorite(movie.id);
+      this.favoriteStates.set(movie.id, isFavorite);
+    }
+  }
+
+  isFavorite(movieId: number): boolean {
+    return this.favoriteStates.get(movieId) || false;
+  }
+
+  async toggleFavorite(movie: TMovie) {
+    await this.favoritesService.toggleFavorite(movie);
+    const newState = await this.favoritesService.isFavorite(movie.id);
+    this.favoriteStates.set(movie.id, newState);
+  }
+
+  // ... other methods remain the same
 
   handleSearchResults(results: TPaginatedMovieResponse | null) {
     if (!results) {
@@ -98,13 +125,6 @@ export class HomeComponent implements OnInit {
     this.totalPages = results.total_pages;
     this.currentPage = results.page;
     this.updateVisiblePages();
-  }
-
-  isFavorite(movieId: number): boolean {
-    return this.favoritesService.isFavorite(movieId);
-  }
-
-  toggleFavorite(movie: TMovie) {
-    this.favoritesService.toggleFavorite(movie);
+    this.updateFavoriteStates(); // Update favorite states for search results
   }
 }

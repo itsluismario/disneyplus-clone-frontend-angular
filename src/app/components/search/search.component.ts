@@ -22,40 +22,30 @@ export class SearchComponent {
   movies: TMovie[] = [];
   private searchSubject = new Subject<string>();
 
+
+  favoriteStates = new Map<number, boolean>();
+
   constructor(private movieService: MovieService, private favoritesService: FavoritesService) {
-    // Set up debounced search
+    // Existing search subject setup remains the same
     this.searchSubject.pipe(
-      debounceTime(10), // Wait 300ms after user stops typing
-      distinctUntilChanged() // Only emit if value changed
+      debounceTime(10),
+      distinctUntilChanged()
     ).subscribe((query) => {
       this.performSearch(query);
+    });
+  }
+
+  ngOnInit() {
+    // Subscribe to favorites changes
+    this.favoritesService.favorites$.subscribe(() => {
+      // Update favorite states for current movies
+      this.updateFavoriteStates();
     });
   }
 
   onSearchInput(event: Event) {
     const query = (event.target as HTMLInputElement).value;
     this.searchSubject.next(query);
-  }
-
-  async performSearch(query: string) {
-    if (!query.trim()) {
-      this.searchResults.emit(null);
-      this.movies = [];
-      return;
-    }
-
-    try {
-      this.loading = true;
-      this.error = null;
-      const response = await this.movieService.searchMovies(query);
-      this.movies = response.results;
-      this.searchResults.emit(response);
-    } catch (error) {
-      this.error = 'Failed to search movies. Please try again.';
-      console.error('Search error:', error);
-    } finally {
-      this.loading = false;
-    }
   }
 
    // Add this method
@@ -73,11 +63,42 @@ export class SearchComponent {
     this.searchResults.emit(null);
   }
 
-  isFavorite(movieId: number): boolean {
-    return this.favoritesService.isFavorite(movieId);
+  async performSearch(query: string) {
+    if (!query.trim()) {
+      this.searchResults.emit(null);
+      this.movies = [];
+      return;
+    }
+
+    try {
+      this.loading = true;
+      this.error = null;
+      const response = await this.movieService.searchMovies(query);
+      this.movies = response.results;
+      this.updateFavoriteStates(); // Update favorite states for new movies
+      this.searchResults.emit(response);
+    } catch (error) {
+      this.error = 'Failed to search movies. Please try again.';
+      console.error('Search error:', error);
+    } finally {
+      this.loading = false;
+    }
   }
 
-  toggleFavorite(movie: TMovie) {
-    this.favoritesService.toggleFavorite(movie);
+  private async updateFavoriteStates() {
+    for (const movie of this.movies) {
+      const isFavorite = await this.favoritesService.isFavorite(movie.id);
+      this.favoriteStates.set(movie.id, isFavorite);
+    }
+  }
+
+  isFavorite(movieId: number): boolean {
+    return this.favoriteStates.get(movieId) || false;
+  }
+
+  async toggleFavorite(movie: TMovie) {
+    await this.favoritesService.toggleFavorite(movie);
+    const newState = await this.favoritesService.isFavorite(movie.id);
+    this.favoriteStates.set(movie.id, newState);
   }
 }

@@ -1,6 +1,10 @@
 <!-- favorites.component.html -->
 <div class="w-full max-w-2xl p-6">
-  @if (favorites.length) {
+  @if (isLoading) {
+    <div class="flex items-center justify-center py-12">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+    </div>
+  } @else if (favorites.length) {
     <div class="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       @for (movie of favorites; track movie.id) {
         <div class="flex gap-4 items-start bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors">
